@@ -845,7 +845,8 @@ Disables the client heartbeat.
 	
 	AppRegistry.registerComponent('RealtimeRCT', () => RealtimeRCT);
 
-	
+## Example
+Checkout the example at [https://github.com/realtime-framework/RealtimeMessaging-ReactNativeAndroidExample](https://github.com/realtime-framework/RealtimeMessaging-ReactNativeAndroidExample)	
 ## Authors
 Realtime.co
 	
