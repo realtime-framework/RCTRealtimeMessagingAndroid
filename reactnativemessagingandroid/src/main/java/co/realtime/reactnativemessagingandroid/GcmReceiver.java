@@ -1,4 +1,4 @@
-package com.rctrealtimemessagingandroid;
+package co.realtime.reactnativemessagingandroid;
 
 import android.app.Activity;
 import android.app.Application;
@@ -11,10 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.rctrealtimemessagingandroid.MainActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -52,7 +48,11 @@ public class GcmReceiver extends GcmOrtcBroadcastReceiver {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         String appName = getAppName(context);
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        String packageName = context.getPackageName();
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        Class className = launchIntent.getComponent().getClass();
+
+        Intent notificationIntent = new Intent(context, className);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         notificationIntent.putExtra("pushBundle", extras);
 

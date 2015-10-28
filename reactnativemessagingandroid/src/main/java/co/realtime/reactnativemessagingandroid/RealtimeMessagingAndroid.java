@@ -1,4 +1,4 @@
-package com.rctrealtimemessagingandroid; /**
+package co.realtime.reactnativemessagingandroid; /**
  * Created by jcaixinha on 15/09/15.
  */
 
@@ -36,6 +36,7 @@ import ibt.ortc.extensibility.OnConnected;
 import ibt.ortc.extensibility.OnDisconnected;
 import ibt.ortc.extensibility.OnException;
 import ibt.ortc.extensibility.OnMessage;
+import ibt.ortc.extensibility.OnMessageWithPayload;
 import ibt.ortc.extensibility.OnReconnected;
 import ibt.ortc.extensibility.OnReconnecting;
 import ibt.ortc.extensibility.OnSubscribed;

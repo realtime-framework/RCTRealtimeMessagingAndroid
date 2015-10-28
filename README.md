@@ -13,48 +13,58 @@ More information can be found on the
 
 * Create a new react-native project. [Check react-native getting started](http://facebook.github.io/react-native/docs/getting-started.html#content)
 
-* On the terminal, go to `PROJECT_DIR/node_modules/react-native`.
-
 * Execute
 
 		 npm install --save react-native-realtimemessaging-android
 
-* Drag all files `node_modules/react-native-realtimemessaging-android` to your `src` package folder.
+* In `android/settings.gradle`
 
-* Add compile `co.realtime:messaging-android:2.1.+` to app dependencies in your `build.gradle` file.
+		...
+		include ':react-native-realtime-messaging-android'
+		project(':react-native-realtime-messaging-android').projectDir = new File(settingsDir,'../node_modules/reactnativemessagingandroid')
 
-* Drag `RCTRealtimeMessagingAndroid.js` to the root of your project.
+* In `android/app/build.gradle`
+
+		...
+		dependencies {
+		    ...
+		    compile project(':react-native-realtime-messaging-android')
+		}
 
 * Add `.addPackage(new CustomReactPackage())` to the `onCreate` method of `MainActivity`.
 
+		import co.realtime.reactnativemessagingandroid.CustomReactPackage; //<-- import
+
+		public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+		
+		    ...
+		    
+		    @Override
+		    protected void onCreate(Bundle savedInstanceState) {
+		        super.onCreate(savedInstanceState);
+		        mReactRootView = new ReactRootView(this);
+		
+		        mReactInstanceManager = ReactInstanceManager.builder()
+		                .setApplication(getApplication())
+		                .setBundleAssetName("index.android.bundle")
+		                .setJSMainModuleName("index.android")
+		                .addPackage(new MainReactPackage())
+		                .addPackage(new CustomReactPackage()) //<-- Add here
+		                .setUseDeveloperSupport(BuildConfig.DEBUG)
+		                .setInitialLifecycleState(LifecycleState.RESUMED)
+		                .build();
+		
+		        mReactRootView.startReactApplication(mReactInstanceManager, "YourProject", null);
+		
+		        setContentView(mReactRootView);
+		    }
+
+   }
+
+
+* Drag `RCTRealtimeMessagingAndroid.js` to the root of your project.
+
 * **If you want to use push notifications**, set `MainActivity` extending `RealtimePushNotificationActivity`.
-
-	* Edit AndroidManifest.xml
-			
-			...
-			<permission android:name="[YOUR RECEIVER PACKAGE].permission.C2D_MESSAGE" android:protectionLevel="signature" />
-			
-		    <uses-permission android:name="[YOUR RECEIVER PACKAGE].permission.C2D_MESSAGE" />
-		    
-		    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-		    ...
-		    
-		    <application
-		    ...
-		    <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-	        <receiver
-	            android:name=".GcmReceiver"
-	            android:permission="com.google.android.c2dm.permission.SEND" >
-	            <intent-filter>
-	                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-	                <category android:name="[YOUR RECEIVER PACKAGE]" />
-	            </intent-filter>
-	        </receiver>
-			    ...
-		    <application/>
-
-
-
 
  You are ready to go.
 
