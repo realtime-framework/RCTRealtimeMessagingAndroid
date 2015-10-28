@@ -1,4 +1,4 @@
-package com.rctrealtimemessagingandroid;
+package co.realtime.reactnativemessagingandroid;
 
 import android.app.Activity;
 import android.os.Bundle;
