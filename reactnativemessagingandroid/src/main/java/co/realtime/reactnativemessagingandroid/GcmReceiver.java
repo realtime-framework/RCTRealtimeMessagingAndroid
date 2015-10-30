@@ -52,7 +52,7 @@ public class GcmReceiver extends GcmOrtcBroadcastReceiver {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
         Class className = launchIntent.getComponent().getClass();
 
-        Intent notificationIntent = new Intent(context, className);
+        Intent notificationIntent =  context.getPackageManager().getLaunchIntentForPackage(packageName);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         notificationIntent.putExtra("pushBundle", extras);
 
