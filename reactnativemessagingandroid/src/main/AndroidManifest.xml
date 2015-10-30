@@ -22,7 +22,7 @@
                 <category android:name="co.realtime.reactnativemessagingandroid" />
             </intent-filter>
         </receiver>
-
+        <service android:name="ibt.ortc.extensibility.GcmOrtcIntentService" />
     </application>
 
 </manifest>
