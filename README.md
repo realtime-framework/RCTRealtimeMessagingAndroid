@@ -21,7 +21,7 @@ More information can be found on the
 
 		...
 		include ':react-native-realtime-messaging-android'
-		project(':react-native-realtime-messaging-android').projectDir = new File(settingsDir,'../node_modules/reactnativemessagingandroid')
+		project(':react-native-realtime-messaging-android').projectDir = new File(settingsDir,'../node_modules/react-native-realtimemessaging-android/reactnativemessagingandroid')
 
 * In `android/app/build.gradle`
 
