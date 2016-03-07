@@ -31,35 +31,25 @@ More information can be found on the
 		    compile project(':react-native-realtime-messaging-android')
 		}
 
-* Add `.addPackage(new CustomReactPackage())` to the `onCreate` method of `MainActivity`.
+* Add `new CustomReactPackage()` to the `getPackages()` method return list in `MainActivity`.
 
 		import co.realtime.reactnativemessagingandroid.CustomReactPackage; //<-- import
 
-		public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+		public class MainActivity extends ReactActivity {
 
 		    ...
 
 		    @Override
-		    protected void onCreate(Bundle savedInstanceState) {
-		        super.onCreate(savedInstanceState);
-		        mReactRootView = new ReactRootView(this);
-
-		        mReactInstanceManager = ReactInstanceManager.builder()
-		                .setApplication(getApplication())
-		                .setBundleAssetName("index.android.bundle")
-		                .setJSMainModuleName("index.android")
-		                .addPackage(new MainReactPackage())
-		                .addPackage(new CustomReactPackage()) //<-- Add here
-		                .setUseDeveloperSupport(BuildConfig.DEBUG)
-		                .setInitialLifecycleState(LifecycleState.RESUMED)
-		                .build();
-
-		        mReactRootView.startReactApplication(mReactInstanceManager, "YourProject", null);
-
-		        setContentView(mReactRootView);
+		    protected List<ReactPackage> getPackages() {
+		        return Arrays.<ReactPackage>asList(
+		                new MainReactPackage(),
+		                new CustomReactPackage() // <-- add CustomReactPackage object
+		        );
 		    }
+		   
+		    ...
 
-   }
+
 
 
 * Drag `RCTRealtimeMessagingAndroid.js` to the root of your project.
