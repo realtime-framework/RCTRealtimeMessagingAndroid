@@ -19,6 +19,6 @@ android {
 }
 
 dependencies {
-    compile ('com.facebook.react:react-native:0.13.+')
+    compile "com.facebook.react:react-native:+"
     compile 'co.realtime:messaging-android:2.1.+'
 }
