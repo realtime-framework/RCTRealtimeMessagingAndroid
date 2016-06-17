@@ -66,8 +66,8 @@ More information can be found on the
 
 ### Import RealtimeMessaging to your project
 
-	var module = require('RCTRealtimeMessagingAndroid');
-	var RCTRealtimeMessaging = new module();
+	import realtime from './RCTRealtimeMessagingAndroid';
+	var RCTRealtimeMessaging = new realtime();
 
 ### Event handling
 
@@ -79,8 +79,8 @@ RTEventListener registers a given event name on the ***notification*** field and
 
 ***Example:***
 
-	var module = require('RCTRealtimeMessagingAndroid');
-	var RCTRealtimeMessaging = new module();
+	import realtime from './RCTRealtimeMessagingAndroid';
+	var RCTRealtimeMessaging = new realtime();
 
 	RCTRealtimeMessaging.RTEventListener("onConnected",this._onConnected),
 
@@ -90,8 +90,8 @@ RTRemoveEventListener removes an event registration. After this method when the 
 
 ***Example:***
 
-	var module = require('RCTRealtimeMessagingAndroid');
-	var RCTRealtimeMessaging = new module();
+	import realtime from './RCTRealtimeMessagingAndroid';
+	var RCTRealtimeMessaging = new realtime();
 
 	RCTRealtimeMessaging.RTEventListener("onConnected",this._onConnected),
 	RCTRealtimeMessaging.RTRemoveEventListener("onConnected"),
@@ -470,13 +470,13 @@ Disables the client heartbeat.
 
 	'use strict';
 
-	var React = require('react-native');
-	var module = require('RCTRealtimeMessagingAndroid');
-	var RCTRealtimeMessaging = new module();
+	import React, { Component } from 'react';
+	import realtime from './RCTRealtimeMessagingAndroid';
+	var RCTRealtimeMessaging = new realtime();
 
 	var messages = [];
 
-	var {
+	import {
 	  AppRegistry,
 	  Image,
 	  StyleSheet,
@@ -487,7 +487,7 @@ Disables the client heartbeat.
 	  TouchableHighlight,
 	  ListView,
 	  View
-	} = React;
+	} from 'react-native';
 
 
 	var RealtimeRCT = React.createClass({
