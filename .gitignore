@@ -11,11 +11,6 @@ reactnativemessagingandroid/.idea/modules.xml
 .idea/modules.xml
 .idea/RCTRealtimeMessagingAndroid.iml
 .idea/vcs.xml
-LICENSE
 reactnativemessagingandroid/.gitignore
-reactnativemessagingandroid/build.gradle
-reactnativemessagingandroid/proguard-rules.pro
 reactnativemessagingandroid/reactnativemessagingandroid.iml
-reactnativemessagingandroid/src/androidTest/java/co/realtime/reactnativemessagingandroid/ApplicationTest.java
-reactnativemessagingandroid/src/main/res/values/strings.xml
-reactnativemessagingandroid/src/test/java/co/realtime/reactnativemessagingandroid/ExampleUnitTest.java
+
