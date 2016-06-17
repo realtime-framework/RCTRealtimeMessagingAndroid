@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by jcaixinha on 15/09/15.
  */
-public class CustomReactPackage implements ReactPackage {
+public class RealtimeMessagingPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.asList(new NativeModule[]{new RealtimeMessagingAndroid(reactContext)});

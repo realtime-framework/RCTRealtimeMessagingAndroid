@@ -31,9 +31,9 @@ More information can be found on the
 		    compile project(':react-native-realtime-messaging-android')
 		}
 
-* Add `new CustomReactPackage()` to the `getPackages()` method return list in `MainActivity`.
+* Add `new RealtimeMessagingPackage()` to the `getPackages()` method return list in `MainActivity`.
 
-		import co.realtime.reactnativemessagingandroid.CustomReactPackage; //<-- import
+		import co.realtime.reactnativemessagingandroid.RealtimeMessagingPackage; //<-- import
 
 		public class MainActivity extends ReactActivity {
 
@@ -43,7 +43,7 @@ More information can be found on the
 		    protected List<ReactPackage> getPackages() {
 		        return Arrays.<ReactPackage>asList(
 		                new MainReactPackage(),
-		                new CustomReactPackage() // <-- add CustomReactPackage object
+		                new RealtimeMessagingPackage() // <-- add RealtimeMessagingPackage object
 		        );
 		    }
 		   
