@@ -9,8 +9,8 @@
 
 'use strict';
 
-var React = require('react-native');
-var NativeModules = React.NativeModules;
+import React, { Component } from 'react';
+import { NativeModules } from 'react-native';
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 var ortcClient = NativeModules.RealtimeMessagingAndroid;
 var RTEvents = {};
@@ -19,6 +19,9 @@ var instances = 0;
 class RCTRealtimeMessagingAndroid extends React.Component {
 	id: String;
 	
+	RCTRealtimeMessagingAndroid(){
+		this.id = instances++;
+	}
 	constructor(props) {
     super(props);
 		this.id = instances++;
