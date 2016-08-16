@@ -31,7 +31,7 @@ More information can be found on the
 		    compile project(':react-native-realtime-messaging-android')
 		}
 
-* Add `new RealtimeMessagingPackage()` to the `getPackages()` method return list in `MainActivity`.
+* Add `new RealtimeMessagingPackage()` to the `getPackages()` method return list in `MainApplication.java`.
 
 		import co.realtime.reactnativemessagingandroid.RealtimeMessagingPackage; //<-- import
 
