@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
-import com.facebook.react.ReactPackage;
-
-import java.util.List;
 
 /**
  * Created by jcaixinha on 16/09/15.
@@ -29,10 +26,6 @@ public class RealtimePushNotificationActivity extends ReactActivity {
         return false;
     }
 
-    @Override
-    protected List<ReactPackage> getPackages() {
-        return null;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
