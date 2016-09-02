@@ -3,7 +3,6 @@ package co.realtime.reactnativemessagingandroid; /**
  */
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,7 +35,7 @@ import ibt.ortc.extensibility.OnConnected;
 import ibt.ortc.extensibility.OnDisconnected;
 import ibt.ortc.extensibility.OnException;
 import ibt.ortc.extensibility.OnMessage;
-import ibt.ortc.extensibility.OnMessageWithPayload;
+import ibt.ortc.extensibility.OnMessageWithFilter;
 import ibt.ortc.extensibility.OnReconnected;
 import ibt.ortc.extensibility.OnReconnecting;
 import ibt.ortc.extensibility.OnSubscribed;
@@ -215,6 +214,25 @@ public class RealtimeMessagingAndroid extends ReactContextBaseJavaModule
         if (queue.containsKey(id)) {
             client = queue.get(id);
             client.disconnect();
+        }
+    }
+
+    @ReactMethod
+    public void subscribeWithFilter(String channel, Boolean subscribeOnReconnect, String filter, Integer id){
+        OrtcClient client = null;
+        if (queue.containsKey(id)) {
+            client = queue.get(id);
+            client.subscribeWithFilter(channel, subscribeOnReconnect, filter, new OnMessageWithFilter() {
+                @Override
+                public void run(OrtcClient ortcClient, String s, boolean filtered, String s1) {
+                    WritableMap params = new WritableNativeMap();
+                    params.putString("channel", s);
+                    params.putString("message", s1);
+                    params.putBoolean("filtered", filtered);
+                    String thisId = "" + RealtimeMessagingAndroid.getKeyByValue(queue, ortcClient);
+                    sendEvent(getReactApplicationContext(), thisId + "-onMessageWithFilter", params);
+                }
+            });
         }
     }
 

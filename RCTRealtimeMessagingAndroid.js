@@ -40,6 +40,10 @@ class RCTRealtimeMessagingAndroid extends React.Component {
 		ortcClient.subscribe(channel, subscribeOnReconnect, this.id);
 	}
 
+	RTSubscribeWithFilter(channel, subscribeOnReconnect: boolean, filter){
+		ortcClient.subscribeWithFilter(channel, subscribeOnReconnect, filter, this.id);
+	}
+
 	RTSubscribeWithNotifications(channel, subscribeOnReconnect: boolean){
 		ortcClient.subscribeWithNotifications(channel, subscribeOnReconnect, this.id);
 	}

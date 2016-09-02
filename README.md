@@ -116,6 +116,8 @@ RTRemoveEventListener removes an event registration. After this method when the 
 
 * onMessage - Occurs when a message is received. The event notification data is `{"message": message,"channel": channel}`
 
+*	onMessageWithFilter - Occurs when a message is received using `RTSubscribeWithFilter`. The event notification data is `{"message": message,"channel": channel, "filtered":true}`, where the filtered property indicates wheter the server was able to successfully filter the message. 
+
 * onPresence - Gets the subscriptions in the specified channel and if active the first 100 unique connection metadata:
 	- On success -> `{"result": result}`
 	- On error -> `{"error": error}`
@@ -219,6 +221,26 @@ Indicates whether the client should subscribe the channel when reconnected (if i
 	RCTRealtimeMessaging.RTSubscribe("MyChannel", true);
 
 ----------
+
+#####RTSubscribeWithFilter(channel, subscribeOnReconnect: boolean, filter)
+
+Subscribes a channel using a filter, to receive only messages that validate the filter.
+
+**Parameters**
+
+* channel - Channel name
+
+* subscribeOnReconnected -
+Indicates whether the client should subscribe to the channel when reconnected (if it was previously subscribed when connected).
+
+*	filter - Filter to apply to messages
+
+***Example:***
+
+	RCTRealtimeMessaging.RTSubscribeWithFilter("MyChannel", true, "message.a = 1");
+
+----------
+
 
 ##### RTSubscribeWithNotifications(channel, subscribeOnReconnect: boolean)
 
