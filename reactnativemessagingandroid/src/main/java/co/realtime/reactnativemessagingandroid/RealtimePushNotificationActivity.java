@@ -21,11 +21,6 @@ public class RealtimePushNotificationActivity extends ReactActivity {
         return null;
     }
 
-    @Override
-    protected boolean getUseDeveloperSupport() {
-        return false;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
