@@ -35,7 +35,7 @@ More information can be found on the
 
 		import co.realtime.reactnativemessagingandroid.RealtimeMessagingPackage; //<-- import
 
-		public class MainActivity extends ReactActivity {
+		public class MainApplication extends Application implements ReactApplication {
 
 		    ...
 
@@ -55,6 +55,12 @@ More information can be found on the
 * Drag `RCTRealtimeMessagingAndroid.js` to the root of your project.
 
 * **If you want to use push notifications**, set `MainActivity` extending `RealtimePushNotificationActivity`.
+
+		import co.realtime.reactnativemessagingandroid.RealtimePushNotificationActivity;
+
+		public class MainActivity extends RealtimePushNotificationActivity {
+		...
+		}
 
  You are ready to go.
 
