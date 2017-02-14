@@ -1,7 +1,5 @@
 package co.realtime.reactnativemessagingandroid;
 
-import android.app.Activity;
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 
 import java.util.Random;
 
@@ -31,7 +28,7 @@ public class GcmReceiver extends GcmOrtcBroadcastReceiver {
             // if we are in the foreground, just surface the payload, else post it to the statusbar
             if (RealtimeMessagingAndroid.isOnForeground()) {
                 extras.putBoolean("foreground", true);
-
+                RealtimeMessagingAndroid.sendExtras(extras);
             } else {
                 extras.putBoolean("foreground", false);
                 // Send a notification if there is a message
@@ -39,7 +36,7 @@ public class GcmReceiver extends GcmOrtcBroadcastReceiver {
                     createNotification(context, extras);
                 }
             }
-            RealtimeMessagingAndroid.sendExtras(extras);
+
         }
     }
 

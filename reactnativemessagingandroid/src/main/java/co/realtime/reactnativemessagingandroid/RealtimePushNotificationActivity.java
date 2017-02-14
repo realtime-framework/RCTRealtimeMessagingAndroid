@@ -37,8 +37,10 @@ public class RealtimePushNotificationActivity extends ReactActivity {
         if (extras != null) {
             Bundle originalExtras = extras.getBundle("pushBundle");
 
-            originalExtras.putBoolean("foreground", false);
-            RealtimeMessagingAndroid.sendExtras(originalExtras);
+            if(originalExtras != null){
+                originalExtras.putBoolean("foreground", false);
+                RealtimeMessagingAndroid.sendExtras(originalExtras);
+            }
         }
     }
 
@@ -57,6 +59,7 @@ public class RealtimePushNotificationActivity extends ReactActivity {
 
         if (RealtimeMessagingAndroid.isOnForeground() == false) {
             RealtimeMessagingAndroid.setIsOnForeground(true);
+            //this.processPushBundle();
         }
     }
 }

@@ -31,7 +31,6 @@ class RCTRealtimeMessagingAndroid extends React.Component {
 		ortcClient.connect(config, this.id);
 	}
 	
-
 	RTDisconnect(){
 		ortcClient.disconnect(this.id);
 	}
@@ -44,6 +43,14 @@ class RCTRealtimeMessagingAndroid extends React.Component {
 		ortcClient.subscribeWithFilter(channel, subscribeOnReconnect, filter, this.id);
 	}
 
+	RTSubscribeWithBuffer(channel, subscriberId){
+		ortcClient.subscribeWithBuffer(channel, subscriberId, this.id);
+	}
+
+	RTSubscribeWithOptions(options){
+		ortcClient.subscribeWithOptions(options, this.id);
+	}
+
 	RTSubscribeWithNotifications(channel, subscribeOnReconnect: boolean){
 		ortcClient.subscribeWithNotifications(channel, subscribeOnReconnect, this.id);
 	}
@@ -52,7 +59,11 @@ class RCTRealtimeMessagingAndroid extends React.Component {
 		ortcClient.unsubscribe(channel, this.id);
 	}
 
-	RTSendMessage(message, channel){
+	RTSendMessage(channel, message, ttl){
+		ortcClient.publish(channel, message, ttl, this.id);
+	}
+
+	RTPublishMessage(message, channel){
 		ortcClient.sendMessage(message, channel, this.id);
 	}
 

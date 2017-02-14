@@ -13,7 +13,10 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -21,8 +24,10 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -35,7 +40,10 @@ import ibt.ortc.extensibility.OnConnected;
 import ibt.ortc.extensibility.OnDisconnected;
 import ibt.ortc.extensibility.OnException;
 import ibt.ortc.extensibility.OnMessage;
+import ibt.ortc.extensibility.OnMessageWithBuffer;
 import ibt.ortc.extensibility.OnMessageWithFilter;
+import ibt.ortc.extensibility.OnMessageWithOptions;
+import ibt.ortc.extensibility.OnPublishResult;
 import ibt.ortc.extensibility.OnReconnected;
 import ibt.ortc.extensibility.OnReconnecting;
 import ibt.ortc.extensibility.OnSubscribed;
@@ -216,6 +224,133 @@ public class RealtimeMessagingAndroid extends ReactContextBaseJavaModule
             client.disconnect();
         }
     }
+
+    private Map<String, Object> recursivelyDeconstructReadableMap(ReadableMap readableMap) {
+        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+        Map<String, Object> deconstructedMap = new HashMap<>();
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            ReadableType type = readableMap.getType(key);
+            switch (type) {
+                case Null:
+                    deconstructedMap.put(key, null);
+                    break;
+                case Boolean:
+                    deconstructedMap.put(key, readableMap.getBoolean(key));
+                    break;
+                case Number:
+                    deconstructedMap.put(key, readableMap.getDouble(key));
+                    break;
+                case String:
+                    deconstructedMap.put(key, readableMap.getString(key));
+                    break;
+                case Map:
+                    deconstructedMap.put(key, recursivelyDeconstructReadableMap(readableMap.getMap(key)));
+                    break;
+                case Array:
+                    deconstructedMap.put(key, recursivelyDeconstructReadableArray(readableMap.getArray(key)));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Could not convert object with key: " + key + ".");
+            }
+
+        }
+        return deconstructedMap;
+    }
+
+    private List<Object> recursivelyDeconstructReadableArray(ReadableArray readableArray) {
+        List<Object> deconstructedList = new ArrayList<>(readableArray.size());
+        for (int i = 0; i < readableArray.size(); i++) {
+            ReadableType indexType = readableArray.getType(i);
+            switch(indexType) {
+                case Null:
+                    deconstructedList.add(i, null);
+                    break;
+                case Boolean:
+                    deconstructedList.add(i, readableArray.getBoolean(i));
+                    break;
+                case Number:
+                    deconstructedList.add(i, readableArray.getDouble(i));
+                    break;
+                case String:
+                    deconstructedList.add(i, readableArray.getString(i));
+                    break;
+                case Map:
+                    deconstructedList.add(i, recursivelyDeconstructReadableMap(readableArray.getMap(i)));
+                    break;
+                case Array:
+                    deconstructedList.add(i, recursivelyDeconstructReadableArray(readableArray.getArray(i)));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Could not convert object at index " + i + ".");
+            }
+        }
+        return deconstructedList;
+    }
+
+
+    @ReactMethod
+    public void subscribeWithOptions(ReadableMap options, Integer id){
+        Map newOptions = recursivelyDeconstructReadableMap(options);
+        OrtcClient client = null;
+        if (queue.containsKey(id)) {
+            client = queue.get(id);
+            client.subscribeWithOptions(newOptions, new OnMessageWithOptions() {
+                @Override
+                public void run(OrtcClient sender, Map msgOptions) {
+                    String thisId = "" + RealtimeMessagingAndroid.getKeyByValue(queue, sender);
+                    WritableMap params = new WritableNativeMap();
+                    params.putString("channel", (String)msgOptions.get("channel"));
+                    params.putString("message", (String)msgOptions.get("message"));
+                    if (msgOptions.containsKey("filtered"))
+                        params.putBoolean("filtered", (Boolean) msgOptions.get("filtered"));
+                    if (msgOptions.containsKey("seqId"))
+                        params.putString("seqId", (String) msgOptions.get("seqId"));
+
+                    sendEvent(getReactApplicationContext(), thisId + "-onMessageWithOptions", params);
+                }
+            });
+        }
+    }
+
+    @ReactMethod
+    public void subscribeWithBuffer(String channel, String subscriberId, Integer id){
+        OrtcClient client = null;
+        if (queue.containsKey(id)) {
+            client = queue.get(id);
+            client.subscribeWithBuffer(channel, subscriberId, new OnMessageWithBuffer() {
+                @Override
+                public void run(OrtcClient sender, String channel, String seqId, String message) {
+                    String thisId = "" + RealtimeMessagingAndroid.getKeyByValue(queue, sender);
+                    WritableMap params = new WritableNativeMap();
+                    params.putString("channel", channel);
+                    params.putString("message", message);
+                    params.putString("seqId", seqId);
+                    sendEvent(getReactApplicationContext(), thisId + "-onMessageWithBuffer", params);
+                }
+            });
+        }
+    }
+
+    @ReactMethod
+    public void publish(String channel, String message, Integer ttl, Integer id, final Callback callBack){
+        if (queue.containsKey(id)) {
+            final OrtcClient client = queue.get(id);
+            client.publish(channel, message, ttl, new OnPublishResult() {
+                @Override
+                public void run(String error, String seqId) {
+                    String pError = "";
+                    String pSeqId = "";
+                    if (error != null)
+                        pError = error;
+                    if (seqId != null)
+                       pSeqId = seqId;
+                    callBack.invoke(pError, pSeqId);
+                }
+            });
+        }
+    }
+
 
     @ReactMethod
     public void subscribeWithFilter(String channel, Boolean subscribeOnReconnect, String filter, Integer id){
@@ -461,6 +596,10 @@ public class RealtimeMessagingAndroid extends ReactContextBaseJavaModule
             }
             else{
                 String message = extras.getString("M");
+                if (message.charAt(0) == '#'){
+                    String seqId = message.substring(message.indexOf("#") + 1,message.indexOf(":"));
+                    json.put("seqId", seqId);
+                }
                 String newMsg = message.substring(message.indexOf("_", message.indexOf("_") + 1) + 1);
                 json.put("message", newMsg);
             }
@@ -502,8 +641,16 @@ public class RealtimeMessagingAndroid extends ReactContextBaseJavaModule
                 gCachedExtras = null;
             } catch (JSONException ex) {
                 WritableMap params = new WritableNativeMap();
-                params.putString("message", json.getString("message"));
-                params.putString("channel", json.getString("channel"));
+
+                Iterator<String> iter = json.keys();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    try {
+                        params.putString(key, json.getString(key));
+                    } catch (JSONException e) {
+                        // Something went wrong!
+                    }
+                }
 
                 if (queue != null){
                     for (int id : this.queue.keySet()){

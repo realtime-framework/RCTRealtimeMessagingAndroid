@@ -52,7 +52,7 @@ More information can be found on the
 
 
 
-* Drag `RCTRealtimeMessagingAndroid.js` to the root of your project.
+* Drag `PROJECT_DIR/node_modules/react-native-realtimemessaging-android/RCTRealtimeMessagingAndroid.js` to the root of your project.
 
 * **If you want to use push notifications**, set `MainActivity` extending `RealtimePushNotificationActivity`.
 
@@ -117,6 +117,23 @@ RTRemoveEventListener removes an event registration. After this method when the 
 * onMessage - Occurs when a message is received. The event notification data is `{"message": message,"channel": channel}`
 
 *	onMessageWithFilter - Occurs when a message is received using `RTSubscribeWithFilter`. The event notification data is `{"message": message,"channel": channel, "filtered":true}`, where the filtered property indicates wheter the server was able to successfully filter the message. 
+
+*	onMessageWithBuffer - Fired when a message was received in the specified channel subscribed with the `RTSubscribeWithBuffer`.
+	- channel - The channel where the message was received
+	- seqId - The message sequence id
+	- message - The message received
+
+*	onMessageWithOptions - Fired when a message was received in the specified channel subscribed with the `RTSubscribeWithOptions`
+	- msgOptions - Dictionary where the message data was received
+	
+	-
+		msgOptions = {
+		    channel, // Channel where the message was received
+		    seqId, // The message sequence id property
+		    filtered, // Indicates if server has filtered the message
+		    message // Content of the received message
+		}
+
 
 * onPresence - Gets the subscriptions in the specified channel and if active the first 100 unique connection metadata:
 	- On success -> `{"result": result}`
@@ -241,6 +258,46 @@ Indicates whether the client should subscribe to the channel when reconnected (i
 
 ----------
 
+#####RTSubscribeWithOptions(options)
+
+Subscribes to a channel to receive messages sent to it with given options.
+
+**Parameters**
+
+* options - The subscription options dictionary, EX:
+options = {
+	channel,
+	subscribeOnReconnected, // optional, default = true,
+	withNotifications (Bool), // optional, default = false, use push notifications as in subscribeWithNotifications
+	filter, // optional, default = "", the subscription filter as in subscribeWithFilter
+	subscriberId // optional, default = "", the subscriberId as in subscribeWithBuffer
+	}
+
+***Example:***
+
+	var options = {
+			"channel":"YOUR_CHANNEL_NAME", 
+			"subscriberId":"CLIENT_SUBSCRIBER_ID", 
+			"filter":"MESSAGE_FILTER"
+			}
+	RCTRealtimeMessaging.RTSubscribeWithOptions(options);
+
+----------
+
+#####RTSubscribeWithBuffer(channel, subscriberId)
+
+Subscribes to a channel to receive messages published to it.
+
+**Parameters**
+
+* channel - The channel name.
+* subscriberId - The subscriberId associated to the channel.
+
+***Example:***
+
+	RCTRealtimeMessaging.RTSubscribeWithBuffer("MyChannel", "CLIENT_SUBSCRIBER_ID");
+
+----------
 
 ##### RTSubscribeWithNotifications(channel, subscribeOnReconnect: boolean)
 
@@ -289,6 +346,25 @@ Sends a message to a pub/sub channel.
 
 ----------
 
+#####RTPublishMessage(channel, message, ttl, onPublishResultCallback)
+
+Publish a message to a channel.
+
+**Parameters**
+
+ * channel - The channel name.
+ * message - The message to publish.
+ * ttl - The message expiration time in seconds (0 for maximum allowed ttl).
+ * onPublishResultCallback - callback returns error if message publish was not successful or published message unique id (seqId) if sucessfully published
+ 
+***Example:***
+
+	RCTRealtimeMessaging.RTPublishMessage("MyChannel", "Hello World", ttl, function(error, seqId){
+	
+	});
+
+----------
+
 ##### RTEnablePresence(aPrivateKey, channel, aMetadata:boolean)
 
 Enables presence for the specified channel with first 100 unique connection metadata.
@@ -300,8 +376,6 @@ Enables presence for the specified channel with first 100 unique connection meta
 * channel - Channel to enable presence
 
 * metadata - Sets to return metadata info
-
-
 
 
 ***Example:***
