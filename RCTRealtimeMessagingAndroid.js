@@ -59,11 +59,11 @@ class RCTRealtimeMessagingAndroid extends React.Component {
 		ortcClient.unsubscribe(channel, this.id);
 	}
 
-	RTSendMessage(channel, message, ttl){
-		ortcClient.publish(channel, message, ttl, this.id);
+	RTPublishMessage(channel, message, ttl, callBack){
+		ortcClient.publish(channel, message, ttl, this.id, callBack);
 	}
 
-	RTPublishMessage(message, channel){
+	RTSendMessage(message, channel){
 		ortcClient.sendMessage(message, channel, this.id);
 	}
 
