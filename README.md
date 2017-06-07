@@ -245,7 +245,7 @@ Indicates whether the client should subscribe the channel when reconnected (if i
 
 ----------
 
-#####RTSubscribeWithFilter(channel, subscribeOnReconnect: boolean, filter)
+##### RTSubscribeWithFilter(channel, subscribeOnReconnect: boolean, filter)
 
 Subscribes a channel using a filter, to receive only messages that validate the filter.
 
@@ -264,7 +264,7 @@ Indicates whether the client should subscribe to the channel when reconnected (i
 
 ----------
 
-#####RTSubscribeWithOptions(options)
+##### RTSubscribeWithOptions(options)
 
 Subscribes to a channel to receive messages sent to it with given options.
 
@@ -290,7 +290,7 @@ options = {
 
 ----------
 
-#####RTSubscribeWithBuffer(channel, subscriberId)
+##### RTSubscribeWithBuffer(channel, subscriberId)
 
 Subscribes to a channel to receive messages published to it.
 
@@ -352,7 +352,7 @@ Sends a message to a pub/sub channel.
 
 ----------
 
-#####RTPublishMessage(channel, message, ttl, onPublishResultCallback)
+##### RTPublishMessage(channel, message, ttl, onPublishResultCallback)
 
 Publish a message to a channel.
 
@@ -366,7 +366,7 @@ Publish a message to a channel.
 ***Example:***
 
 	RCTRealtimeMessaging.RTPublishMessage("MyChannel", "Hello World", ttl, function(error, seqId){
-	
+
 	});
 
 ----------
